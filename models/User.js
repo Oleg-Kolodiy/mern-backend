@@ -1,11 +1,7 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 const UserSchema = new mongoose.Schema(
   {
-    fullName: {
-      type: String,
-      required: true,
-    },
     email: {
       type: String,
       required: true,
@@ -15,11 +11,17 @@ const UserSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    avatarUrl: String,
+    fullName: {
+      type: String,
+      required: true,
+    },
+    avatarUrl: {
+      type: String,
+    },
   },
   {
     timestamps: true,
-  },
+  }
 );
 
-export default mongoose.model('User', UserSchema);
+export default mongoose.model("User", UserSchema);

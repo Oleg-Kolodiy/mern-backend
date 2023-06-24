@@ -1,2 +1,3 @@
-export { default as checkAuth } from './checkAuth.js';
-export { default as handleValidationErrors } from './handleValidationErrors.js';
+export { createToken } from "./createToken.js";
+export { checkAuth } from "./checkAuth.js";
+export { handleValidationErrors } from "./handleValidationErrors.js";
