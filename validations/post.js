@@ -6,6 +6,5 @@ export const postCreateValidation = [
   body("tags", "Невірний формат тегів (вкажіть масив тегів типу String)")
     .optional()
     .isArray(),
-  body("comments", "Введіть коментар").optional().isArray(),
   body("imageUrl", "Невірне посилання на зображення").optional().isString(),
 ];

@@ -1,8 +1,19 @@
 import PostModel from "../models/Post.js";
+import { getInitialSortOrder } from "../utils/index.js";
+
+// видалення поста ,якщо він є його автором
+// різні папки створювати для різних типів файлів
 
 export const getAll = async (req, res) => {
   try {
-    const posts = await PostModel.find().populate("user").exec();
+    const { limit, order } = req.query;
+    const sortOrder = getInitialSortOrder(order);
+
+    const posts = await PostModel.find()
+      .populate("user", "-passwordHash")
+      .sort(sortOrder)
+      .limit(limit)
+      .exec();
 
     res.json(posts);
   } catch (error) {
@@ -26,6 +37,7 @@ export const getById = async (req, res) => {
         returnDocument: "after",
       }
     )
+      .populate("user", "-passwordHash")
       .then((doc) => {
         if (!doc) {
           return res.status(404).json({
@@ -53,8 +65,8 @@ export const create = async (req, res) => {
   try {
     const { body, userId } = req;
     const doc = new PostModel({
-      ...body,
       user: userId,
+      ...body,
     });
 
     const post = await doc.save();
@@ -123,12 +135,15 @@ export const remove = async (req, res) => {
 
 export const getTags = async (req, res) => {
   try {
-    const posts = await PostModel.find().exec();
+    const { limit, order } = req.query;
+    const sortOrder = getInitialSortOrder(order);
+
+    const posts = await PostModel.find().sort(sortOrder).exec();
 
     const tags = posts
       .map(({ tags }) => tags)
       .flat()
-      .slice(0, req.query.limit || 5);
+      .slice(0, limit);
 
     res.json(tags);
   } catch (error) {
